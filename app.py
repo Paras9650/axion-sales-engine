@@ -59,7 +59,10 @@ left_chart_col, right_pred_col = st.columns(2)
 with left_chart_col:
     st.subheader("📈 Category Performance (Historical Breakdown)")
     top_products = df.groupby('Product_Name')['Total_Sales_INR'].sum().reset_index()
-    st.bar_chart(data=top_products, x='Product_Name', y='Total_Sales_INR')
+    
+    # Python 3.14 Compatibility Fix: Converting DataFrame into an indexed chart matrix
+    chart_data = top_products.set_index('Product_Name')[['Total_Sales_INR']]
+    st.bar_chart(chart_data)
 
 with right_pred_col:
     st.subheader("🔮 ML Predictive Forecasting (Next 7 Days)")
