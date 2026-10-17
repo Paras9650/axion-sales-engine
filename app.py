@@ -1,6 +1,7 @@
 import streamlit as st
 import pandas as pd
 import numpy as np
+import matplotlib.pyplot as plt
 from sklearn.linear_model import LinearRegression
 from datetime import datetime, timedelta
 
@@ -60,9 +61,15 @@ with left_chart_col:
     st.subheader("📈 Category Performance (Historical Breakdown)")
     top_products = df.groupby('Product_Name')['Total_Sales_INR'].sum().reset_index()
     
-    # Python 3.14 Compatibility Fix: Converting DataFrame into an indexed chart matrix
-    chart_data = top_products.set_index('Product_Name')[['Total_Sales_INR']]
-    st.bar_chart(chart_data)
+    # Python 3.14 Compatibility Fix: Using Native Matplotlib Plotting System
+    fig, ax = plt.subplots(figsize=(6, 4))
+    ax.bar(top_products['Product_Name'], top_products['Total_Sales_INR'], color='#1E3A8A', edgecolor='black', width=0.5)
+    ax.set_ylabel("Total Sales (INR)", fontsize=10, fontweight='bold')
+    ax.set_xlabel("Product Categories", fontsize=10, fontweight='bold')
+    ax.grid(axis='y', linestyle='--', alpha=0.7)
+    
+    # Render the chart natively as a static layout component
+    st.pyplot(fig)
 
 with right_pred_col:
     st.subheader("🔮 ML Predictive Forecasting (Next 7 Days)")
